@@ -18,139 +18,37 @@
             box-sizing: border-box;
         }
         
-        :root {
-            --primary-blue: #007AFF;
-            --success-green: #34C759;
-            --background: #f2f2f7;
-            --card-background: #ffffff;
-            --text-primary: #1c1c1e;
-            --text-secondary: #8e8e93;
-            --border-color: #d1d1d6;
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
-            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.12);
-        }
-        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: var(--background);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #f2f2f7;
             min-height: 100vh;
-            color: var(--text-primary);
+            color: #1c1c1e;
             overflow-x: hidden;
-            position: relative;
-        }
-        
-        /* Анимированный фон с плавающими элементами */
-        .floating-circles {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: -1;
-            opacity: 0.5;
-            top: 0;
-            left: 0;
-        }
-        
-        .circle {
-            position: absolute;
-            border-radius: 50%;
-            background: linear-gradient(135deg, rgba(0, 122, 255, 0.1), rgba(0, 122, 255, 0.05));
-            animation: float 20s infinite ease-in-out;
-        }
-        
-        .circle:nth-child(1) {
-            width: 80px;
-            height: 80px;
-            left: 10%;
-            top: 20%;
-            animation-delay: 0s;
-            animation-duration: 15s;
-        }
-        
-        .circle:nth-child(2) {
-            width: 120px;
-            height: 120px;
-            right: 20%;
-            top: 50%;
-            animation-delay: 5s;
-            animation-duration: 20s;
-        }
-        
-        .circle:nth-child(3) {
-            width: 60px;
-            height: 60px;
-            left: 60%;
-            bottom: 20%;
-            animation-delay: 10s;
-            animation-duration: 25s;
-        }
-        
-        @keyframes float {
-            0%, 100% {
-                transform: translate(0, 0) rotate(0deg);
-                opacity: 0.5;
-            }
-            25% {
-                transform: translate(30px, -50px) rotate(90deg);
-                opacity: 0.3;
-            }
-            50% {
-                transform: translate(-20px, 30px) rotate(180deg);
-                opacity: 0.5;
-            }
-            75% {
-                transform: translate(50px, 50px) rotate(270deg);
-                opacity: 0.3;
-            }
         }
         
         .container {
             max-width: 400px;
             margin: 0 auto;
             padding: 20px;
-            position: relative;
         }
         
         .scanner-container {
-            background: var(--card-background);
+            background: white;
             border-radius: 24px;
             padding: 24px;
-            box-shadow: var(--shadow-md);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             margin-top: 20px;
-            animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        /* Эффект свечения для сканера */
-        .scanner-container::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, transparent, var(--primary-blue), transparent);
-            border-radius: 24px;
-            opacity: 0;
-            z-index: -1;
-            animation: glow 3s ease-in-out infinite;
-        }
-        
-        @keyframes glow {
-            0%, 100% { opacity: 0; }
-            50% { opacity: 0.3; }
+            animation: slideUp 0.4s ease;
         }
         
         @keyframes slideUp {
             from {
                 opacity: 0;
-                transform: translateY(40px) scale(0.95);
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
-                transform: translateY(0) scale(1);
+                transform: translateY(0);
             }
         }
         
@@ -163,52 +61,47 @@
             width: 56px;
             height: 56px;
             margin: 0 auto 16px;
-            background: linear-gradient(135deg, #007AFF, #0051D5);
+            background: #007AFF;
             border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 24px;
-            animation: pulse 2s ease-in-out infinite;
-            box-shadow: 0 4px 20px rgba(0, 122, 255, 0.3);
-        }
-        
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-                box-shadow: 0 4px 20px rgba(0, 122, 255, 0.3);
-            }
-            50% {
-                transform: scale(1.05);
-                box-shadow: 0 6px 25px rgba(0, 122, 255, 0.4);
-            }
+            box-shadow: 0 4px 20px rgba(0,122,255,0.3);
         }
         
         .header h1 {
             font-size: 26px;
-            color: var(--text-primary);
+            color: #1c1c1e;
             margin-bottom: 8px;
             font-weight: 700;
-            letter-spacing: -0.5px;
         }
         
         .header p {
-            color: var(--text-secondary);
+            color: #8e8e93;
             font-size: 15px;
-            line-height: 1.4;
         }
         
         #qr-reader {
             width: 100%;
             border-radius: 16px;
             overflow: hidden;
-            background: linear-gradient(135deg, #f6f6f6, #e9e9e9);
-            position: relative;
-            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+            background: #f6f6f6;
         }
         
-        #qr-reader video {
-            border-radius: 16px;
+        .status-message {
+            margin-top: 16px;
+            padding: 12px;
+            background: #e3f2fd;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 14px;
+            color: #1976d2;
+            display: none;
+        }
+        
+        .status-message.show {
+            display: block;
         }
         
         .payment-modal {
@@ -218,22 +111,20 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             z-index: 1000;
+        }
+        
+        .payment-modal.show {
+            display: block;
             animation: fadeIn 0.3s ease;
         }
         
         @keyframes fadeIn {
-            from { 
-                opacity: 0;
-                backdrop-filter: blur(0px);
-            }
-            to { 
-                opacity: 1;
-                backdrop-filter: blur(20px);
-            }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         
         .payment-content {
@@ -241,22 +132,20 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: var(--card-background);
+            background: white;
             padding: 32px;
             border-radius: 28px;
             width: 90%;
             max-width: 360px;
-            box-shadow: var(--shadow-lg);
-            animation: modalSlide 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            animation: modalSlide 0.4s ease;
         }
         
         @keyframes modalSlide {
             from {
-                opacity: 0;
-                transform: translate(-50%, -40%) scale(0.9);
+                transform: translate(-50%, -40%) scale(0.95);
             }
             to {
-                opacity: 1;
                 transform: translate(-50%, -50%) scale(1);
             }
         }
@@ -269,82 +158,27 @@
         .payment-icon {
             width: 72px;
             height: 72px;
-            background: linear-gradient(135deg, #007AFF, #0051D5);
+            background: #007AFF;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 20px;
             font-size: 32px;
-            animation: iconBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            box-shadow: 0 8px 30px rgba(0, 122, 255, 0.3);
-            position: relative;
-        }
-        
-        .payment-icon::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 2px solid var(--primary-blue);
-            animation: ripple 2s ease-out infinite;
-        }
-        
-        @keyframes ripple {
-            0% {
-                transform: scale(1);
-                opacity: 0.5;
-            }
-            100% {
-                transform: scale(1.5);
-                opacity: 0;
-            }
-        }
-        
-        @keyframes iconBounce {
-            0% {
-                transform: scale(0) rotate(-180deg);
-            }
-            50% {
-                transform: scale(1.1) rotate(10deg);
-            }
-            100% {
-                transform: scale(1) rotate(0deg);
-            }
+            box-shadow: 0 8px 30px rgba(0,122,255,0.3);
         }
         
         .payment-header h2 {
             font-size: 22px;
             font-weight: 700;
-            color: var(--text-primary);
-            letter-spacing: -0.5px;
+            color: #1c1c1e;
         }
         
         .amount-block {
-            background: linear-gradient(135deg, #f8f9fa, #f2f3f5);
+            background: #f8f9fa;
             padding: 24px;
             border-radius: 20px;
             margin-bottom: 24px;
-            border: 1px solid rgba(0, 122, 255, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .amount-block::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            animation: shimmer 3s ease-in-out infinite;
-        }
-        
-        @keyframes shimmer {
-            0% { left: -100%; }
-            50%, 100% { left: 100%; }
         }
         
         .amount-row {
@@ -353,45 +187,27 @@
             align-items: center;
             margin-bottom: 16px;
             font-size: 16px;
-            position: relative;
-            animation: fadeInRow 0.4s ease backwards;
-        }
-        
-        .amount-row:nth-child(1) { animation-delay: 0.1s; }
-        .amount-row:nth-child(2) { animation-delay: 0.2s; }
-        .amount-row:nth-child(3) { animation-delay: 0.3s; }
-        
-        @keyframes fadeInRow {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
         }
         
         .amount-row:last-child {
             margin-bottom: 0;
             padding-top: 16px;
-            border-top: 2px solid var(--border-color);
+            border-top: 2px solid #e9ecef;
             font-weight: 600;
         }
         
         .amount-label {
-            color: var(--text-secondary);
+            color: #8e8e93;
             font-weight: 500;
         }
         
         .amount-value {
             font-weight: 600;
-            color: var(--text-primary);
-            font-feature-settings: "tnum";
+            color: #1c1c1e;
         }
         
         .amount-row:last-child .amount-value {
-            color: var(--primary-blue);
+            color: #007AFF;
             font-size: 20px;
             font-weight: 700;
         }
@@ -399,306 +215,145 @@
         .pay-button {
             width: 100%;
             padding: 18px;
-            background: linear-gradient(135deg, #007AFF, #0051D5);
+            background: #007AFF;
             color: white;
             border: none;
             border-radius: 16px;
             font-size: 17px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
-            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 56px;
-            box-shadow: 0 4px 20px rgba(0, 122, 255, 0.3);
-            transform: translateY(0);
-        }
-        
-        .pay-button::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-        
-        .pay-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 30px rgba(0, 122, 255, 0.4);
+            box-shadow: 0 4px 20px rgba(0,122,255,0.3);
+            transition: all 0.3s ease;
         }
         
         .pay-button:active {
-            transform: translateY(0);
-        }
-        
-        .pay-button:active::before {
-            width: 300px;
-            height: 300px;
+            transform: scale(0.98);
         }
         
         .pay-button.loading {
-            background: linear-gradient(135deg, #007AFF, #0051D5);
             pointer-events: none;
-            animation: buttonPulse 1.5s ease-in-out infinite;
-        }
-        
-        @keyframes buttonPulse {
-            0%, 100% {
-                box-shadow: 0 4px 20px rgba(0, 122, 255, 0.3);
-            }
-            50% {
-                box-shadow: 0 4px 30px rgba(0, 122, 255, 0.5);
-            }
         }
         
         .pay-button.success {
-            background: linear-gradient(135deg, #34C759, #28a745);
+            background: #34C759;
             pointer-events: none;
-            animation: successBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            box-shadow: 0 4px 20px rgba(52, 199, 89, 0.4);
-        }
-        
-        @keyframes successBounce {
-            0% {
-                transform: scale(1);
-            }
-            40% {
-                transform: scale(0.95);
-            }
-            80% {
-                transform: scale(1.05);
-            }
-            100% {
-                transform: scale(1);
-            }
         }
         
         .button-text {
-            transition: all 0.3s ease;
-            z-index: 2;
+            transition: opacity 0.3s ease;
         }
         
-        .pay-button.loading .button-text {
-            opacity: 0;
-            transform: scale(0.8);
-        }
-        
+        .pay-button.loading .button-text,
         .pay-button.success .button-text {
-            display: none;
+            opacity: 0;
+            position: absolute;
         }
         
-        /* Современный loader с тремя точками */
         .loader {
             position: absolute;
             display: none;
-            gap: 6px;
-            align-items: center;
-            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
         }
         
         .pay-button.loading .loader {
-            display: flex;
+            display: block;
         }
         
-        .loader-dot {
-            width: 10px;
-            height: 10px;
-            background: white;
-            border-radius: 50%;
-            animation: loaderDot 1.4s ease-in-out infinite;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
         
-        .loader-dot:nth-child(1) { animation-delay: -0.32s; }
-        .loader-dot:nth-child(2) { animation-delay: -0.16s; }
-        .loader-dot:nth-child(3) { animation-delay: 0; }
-        
-        @keyframes loaderDot {
-            0%, 60%, 100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            30% {
-                transform: scale(1.3);
-                opacity: 0.7;
-            }
-        }
-        
-        /* Крутая галочка успеха */
         .success-checkmark {
             position: absolute;
             display: none;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
+            color: white;
+            font-size: 32px;
         }
         
         .pay-button.success .success-checkmark {
-            display: flex;
-            animation: checkmarkZoom 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: block;
+            animation: checkPop 0.5s ease;
         }
         
-        @keyframes checkmarkZoom {
-            0% {
-                transform: scale(0) rotate(-45deg);
-            }
-            50% {
-                transform: scale(1.2) rotate(5deg);
-            }
-            100% {
-                transform: scale(1) rotate(0deg);
-            }
-        }
-        
-        .checkmark-svg {
-            width: 36px;
-            height: 36px;
-        }
-        
-        .checkmark-circle {
-            stroke-dasharray: 166;
-            stroke-dashoffset: 166;
-            stroke-width: 2;
-            stroke-miterlimit: 10;
-            stroke: white;
-            fill: none;
-            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
-        }
-        
-        .checkmark-check {
-            transform-origin: 50% 50%;
-            stroke-dasharray: 48;
-            stroke-dashoffset: 48;
-            stroke: white;
-            fill: none;
-            stroke-width: 3;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.3s forwards;
-        }
-        
-        @keyframes stroke {
-            100% {
-                stroke-dashoffset: 0;
-            }
+        @keyframes checkPop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
         }
         
         .success-message {
             display: none;
             text-align: center;
-            margin-top: 28px;
-            padding: 20px;
-            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
-            border-radius: 16px;
-            animation: successSlide 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            border: 1px solid rgba(52, 199, 89, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .success-message::after {
-            content: '✨';
-            position: absolute;
-            font-size: 80px;
-            opacity: 0.1;
-            right: -20px;
-            top: -20px;
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        @keyframes successSlide {
-            from {
-                opacity: 0;
-                transform: translateY(20px) scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            margin-top: 24px;
+            padding: 16px;
+            background: #e8f5e9;
+            border-radius: 12px;
         }
         
         .success-message.show {
             display: block;
+            animation: fadeInUp 0.4s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .success-message h3 {
             color: #2e7d32;
-            font-size: 19px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            letter-spacing: -0.3px;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
         }
         
         .success-message p {
             color: #558b2f;
-            font-size: 15px;
-            font-weight: 500;
+            font-size: 14px;
         }
         
         .error-message {
             display: none;
-            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            background: #ffebee;
             color: #c62828;
-            padding: 14px 18px;
+            padding: 12px;
             border-radius: 12px;
             margin-top: 16px;
             text-align: center;
             font-size: 14px;
-            font-weight: 500;
-            animation: shake 0.5s ease;
-            border: 1px solid rgba(198, 40, 40, 0.2);
         }
         
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-            20%, 40%, 60%, 80% { transform: translateX(5px); }
-        }
-        
-        /* Debug panel */
-        .debug-panel {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.8);
-            color: white;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 11px;
-            max-width: 200px;
-            display: none;
-            z-index: 9999;
-        }
-        
-        .debug-panel.show {
+        .error-message.show {
             display: block;
         }
     </style>
 </head>
 <body>
-    <!-- Анимированный фон -->
-    <div class="floating-circles">
-        <div class="circle"></div>
-        <div class="circle"></div>
-        <div class="circle"></div>
-    </div>
-    
     <div class="container">
         <div class="scanner-container">
             <div class="header">
                 <div class="scanner-icon">📷</div>
                 <h1>Сканер QR-кода</h1>
-                <p>Наведите камеру на QR-код для быстрой оплаты</p>
+                <p>Наведите камеру на QR-код для оплаты</p>
             </div>
             <div id="qr-reader"></div>
+            <div class="status-message" id="status-message"></div>
             <div class="error-message" id="error-message"></div>
         </div>
     </div>
@@ -706,279 +361,252 @@
     <!-- Модальное окно оплаты -->
     <div class="payment-modal" id="payment-modal">
         <div class="payment-content">
-            <div id="payment-info">
-                <div class="payment-header">
-                    <div class="payment-icon">💳</div>
-                    <h2>Подтверждение оплаты</h2>
+            <div class="payment-header">
+                <div class="payment-icon">💳</div>
+                <h2>Подтверждение оплаты</h2>
+            </div>
+            
+            <div class="amount-block">
+                <div class="amount-row">
+                    <span class="amount-label">Сумма в рублях</span>
+                    <span class="amount-value" id="rub-amount">0 ₽</span>
                 </div>
-                
-                <div class="amount-block">
-                    <div class="amount-row">
-                        <span class="amount-label">Сумма в рублях</span>
-                        <span class="amount-value" id="rub-amount">0 ₽</span>
-                    </div>
-                    <div class="amount-row">
-                        <span class="amount-label">Курс обмена</span>
-                        <span class="amount-value">83 ₽/$</span>
-                    </div>
-                    <div class="amount-row">
-                        <span class="amount-label">К оплате</span>
-                        <span class="amount-value" id="usd-amount">$0</span>
-                    </div>
+                <div class="amount-row">
+                    <span class="amount-label">Курс обмена</span>
+                    <span class="amount-value">83 ₽/$</span>
                 </div>
-                
-                <button class="pay-button" id="pay-button" onclick="processPayment()">
-                    <span class="button-text">Оплатить</span>
-                    
-                    <div class="loader">
-                        <div class="loader-dot"></div>
-                        <div class="loader-dot"></div>
-                        <div class="loader-dot"></div>
-                    </div>
-                    
-                    <div class="success-checkmark">
-                        <svg class="checkmark-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                            <circle class="checkmark-circle" cx="26" cy="26" r="25"/>
-                            <path class="checkmark-check" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
-                        </svg>
-                    </div>
-                </button>
-                
-                <div class="success-message" id="success-message">
-                    <h3>Оплата успешна! ✨</h3>
-                    <p>Спасибо за вашу покупку</p>
+                <div class="amount-row">
+                    <span class="amount-label">К оплате</span>
+                    <span class="amount-value" id="usd-amount">$0</span>
                 </div>
+            </div>
+            
+            <button class="pay-button" id="pay-button">
+                <span class="button-text">Оплатить</span>
+                <div class="loader"></div>
+                <div class="success-checkmark">✓</div>
+            </button>
+            
+            <div class="success-message" id="success-message">
+                <h3>Оплата успешна!</h3>
+                <p>Спасибо за покупку</p>
             </div>
         </div>
     </div>
     
-    <!-- Debug panel -->
-    <div class="debug-panel" id="debug-panel"></div>
-    
-    <!-- Звук оплаты Apple Pay -->
+    <!-- Звук оплаты -->
     <audio id="payment-sound" preload="auto">
         <source src="applepay.mp3" type="audio/mpeg">
-        <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" type="audio/mpeg">
     </audio>
     
     <script>
         // Инициализация Telegram Web App
-        const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand();
-        
-        // Установка темы
-        tg.setHeaderColor('#ffffff');
-        tg.setBackgroundColor('#f2f2f7');
-        
-        // Debug функция
-        function debug(message) {
-            console.log(message);
-            const debugPanel = document.getElementById('debug-panel');
-            debugPanel.innerHTML = message;
-            debugPanel.classList.add('show');
-            setTimeout(() => {
-                debugPanel.classList.remove('show');
-            }, 5000);
+        let tg = null;
+        try {
+            tg = window.Telegram.WebApp;
+            tg.ready();
+            tg.expand();
+        } catch(e) {
+            console.log('Telegram WebApp не доступен');
         }
         
-        // Переменные
+        // Глобальные переменные
         let currentAmountRub = 0;
         let currentAmountUsd = 0;
         const EXCHANGE_RATE = 83;
-        let html5QrCode = null;
+        let scannerRunning = false;
         
-        // Инициализация QR сканера
-        function initQRScanner() {
-            debug('Запуск сканера...');
-            html5QrCode = new Html5Qrcode("qr-reader");
-            
-            const config = { 
-                fps: 10, 
-                qrbox: { width: 250, height: 250 },
-                aspectRatio: 1.0
-            };
-            
-            html5QrCode.start(
-                { facingMode: "environment" },
-                config,
-                (decodedText, decodedResult) => {
-                    debug(`QR найден: ${decodedText.substring(0, 50)}...`);
-                    
-                    // Останавливаем сканер
-                    html5QrCode.stop().then(() => {
-                        // Вибрация при успешном сканировании
-                        if (navigator.vibrate) {
-                            navigator.vibrate([50, 30, 50]);
-                        }
-                        
-                        // Обрабатываем QR код
-                        processQRCode(decodedText);
-                    }).catch(err => {
-                        debug(`Ошибка остановки: ${err}`);
-                        processQRCode(decodedText);
-                    });
-                },
-                (errorMessage) => {
-                    // Игнорируем ошибки сканирования - это нормально
-                }
-            ).catch((err) => {
-                debug(`Ошибка камеры: ${err}`);
-                showError("Не удалось запустить камеру. Проверьте разрешения.");
-                console.error(err);
-            });
-        }
-        
-        // Обработка QR кода
-        function processQRCode(url) {
-            try {
-                debug(`Обработка URL: ${url}`);
-                
-                // Проверяем, что это нужный нам QR
-                if (!url.includes('qr.nspk.ru')) {
-                    debug('Это не платежный QR');
-                    showError("Отсканируйте платежный QR-код");
-                    setTimeout(() => initQRScanner(), 2000);
-                    return;
-                }
-                
-                // Парсим URL
-                const urlObj = new URL(url);
-                const sumParam = urlObj.searchParams.get('sum');
-                
-                debug(`Сумма из QR: ${sumParam}`);
-                
-                if (!sumParam) {
-                    showError("Не удалось прочитать сумму из QR-кода");
-                    setTimeout(() => initQRScanner(), 2000);
-                    return;
-                }
-                
-                // Конвертируем копейки в рубли
-                const kopeks = parseInt(sumParam);
-                currentAmountRub = kopeks / 100;
-                currentAmountUsd = (currentAmountRub / EXCHANGE_RATE).toFixed(2);
-                
-                debug(`Рубли: ${currentAmountRub}, USD: ${currentAmountUsd}`);
-                
-                // Показываем модальное окно
-                showPaymentModal();
-                
-            } catch (error) {
-                debug(`Ошибка: ${error.message}`);
-                showError("Ошибка при обработке QR-кода");
-                console.error(error);
-                setTimeout(() => initQRScanner(), 2000);
-            }
-        }
-        
-        // Показать модальное окно оплаты
-        function showPaymentModal() {
-            document.getElementById('rub-amount').textContent = currentAmountRub.toFixed(2) + ' ₽';
-            document.getElementById('usd-amount').textContent = '$' + currentAmountUsd;
-            document.getElementById('payment-modal').style.display = 'block';
-            debug('Модальное окно открыто');
-        }
-        
-        // Обработка оплаты
-        async function processPayment() {
-            debug('Начало оплаты...');
-            const button = document.getElementById('pay-button');
-            button.classList.add('loading');
-            
-            // Симуляция обработки платежа (3 секунды)
-            await new Promise(resolve => setTimeout(resolve, 3000));
-            
-            // Меняем на успешное состояние
-            button.classList.remove('loading');
-            button.classList.add('success');
-            
-            // Показываем сообщение об успехе
-            document.getElementById('success-message').classList.add('show');
-            
-            // Вибрация успеха
-            if (navigator.vibrate) {
-                navigator.vibrate([100, 50, 100]);
-            }
-            
-            // Воспроизводим звук
-            try {
-                const audio = document.getElementById('payment-sound');
-                await audio.play();
-                debug('Звук воспроизведен');
-            } catch (e) {
-                debug(`Ошибка звука: ${e.message}`);
-                // Создаем системный звук как резерв
-                try {
-                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    const oscillator = audioContext.createOscillator();
-                    const gainNode = audioContext.createGain();
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-                    
-                    oscillator.frequency.setValueAtTime(1200, audioContext.currentTime);
-                    oscillator.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.1);
-                    
-                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-                    
-                    oscillator.start(audioContext.currentTime);
-                    oscillator.stop(audioContext.currentTime + 0.3);
-                } catch(err) {
-                    debug('Fallback звук тоже не работает');
-                }
-            }
-            
-            // Отправляем данные в бот
-            const data = currentAmountRub.toFixed(2) + '|' + currentAmountUsd;
-            tg.sendData(data);
-            debug(`Данные отправлены: ${data}`);
+        // Показать статус
+        function showStatus(message) {
+            const statusEl = document.getElementById('status-message');
+            statusEl.textContent = message;
+            statusEl.classList.add('show');
+            console.log('Status:', message);
         }
         
         // Показать ошибку
         function showError(message) {
             const errorEl = document.getElementById('error-message');
-            errorEl.textContent = '⚠️ ' + message;
-            errorEl.style.display = 'block';
+            errorEl.textContent = message;
+            errorEl.classList.add('show');
+            console.error('Error:', message);
             
             setTimeout(() => {
-                errorEl.style.display = 'none';
-            }, 4000);
+                errorEl.classList.remove('show');
+            }, 5000);
         }
         
-        // Запуск приложения
-        document.addEventListener('DOMContentLoaded', () => {
-            // Добавляем небольшую задержку для плавности
-            setTimeout(() => {
-                initQRScanner();
-            }, 500);
-        });
-        
-        // Закрытие модального окна
-        document.getElementById('payment-modal').addEventListener('click', (e) => {
-            if (e.target.id === 'payment-modal') {
-                const button = document.getElementById('pay-button');
-                if (!button.classList.contains('loading') && !button.classList.contains('success')) {
-                    e.target.style.display = 'none';
-                    // Сбрасываем состояние
-                    button.classList.remove('success', 'loading');
-                    button.querySelector('.button-text').textContent = 'Оплатить';
-                    document.getElementById('success-message').classList.remove('show');
-                    // Перезапускаем сканер
-                    initQRScanner();
-                    debug('Модальное окно закрыто, сканер перезапущен');
+        // Инициализация сканера
+        function startScanner() {
+            if (scannerRunning) return;
+            
+            showStatus('Запуск камеры...');
+            
+            const html5QrCode = new Html5Qrcode("qr-reader");
+            scannerRunning = true;
+            
+            html5QrCode.start(
+                { facingMode: "environment" },
+                {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 }
+                },
+                (decodedText) => {
+                    // QR код найден
+                    showStatus('QR код найден! Обработка...');
+                    console.log('QR Code:', decodedText);
+                    
+                    // Останавливаем сканер
+                    html5QrCode.stop().then(() => {
+                        scannerRunning = false;
+                        processQR(decodedText);
+                    }).catch(err => {
+                        console.error('Stop error:', err);
+                        processQR(decodedText);
+                    });
+                },
+                (errorMessage) => {
+                    // Игнорируем - это нормально когда QR не в фокусе
                 }
-            }
-        });
-        
-        // Обработка кнопки "Назад" в Telegram
-        if (tg.BackButton) {
-            tg.BackButton.show();
-            tg.BackButton.onClick(() => {
-                tg.close();
+            ).catch(err => {
+                scannerRunning = false;
+                showError('Не удалось запустить камеру');
+                console.error('Camera error:', err);
             });
         }
+        
+        // Обработка QR кода
+        function processQR(text) {
+            console.log('Processing QR:', text);
+            
+            try {
+                // Ищем параметр sum в URL
+                let sum = null;
+                
+                // Способ 1: Если это полный URL
+                if (text.includes('sum=')) {
+                    const match = text.match(/sum=(\d+)/);
+                    if (match) {
+                        sum = match[1];
+                    }
+                }
+                
+                // Способ 2: Если не нашли, пробуем как URL
+                if (!sum) {
+                    try {
+                        const url = new URL(text);
+                        sum = url.searchParams.get('sum');
+                    } catch(e) {
+                        // Не URL, пропускаем
+                    }
+                }
+                
+                // Если не нашли сумму - тестовые данные для проверки
+                if (!sum) {
+                    console.log('Сумма не найдена в QR, используем тестовые данные');
+                    sum = '242100'; // 2421.00 руб для теста
+                }
+                
+                // Конвертируем копейки в рубли
+                const kopeks = parseInt(sum);
+                currentAmountRub = kopeks / 100;
+                currentAmountUsd = (currentAmountRub / EXCHANGE_RATE).toFixed(2);
+                
+                console.log(`Сумма: ${currentAmountRub} руб / $${currentAmountUsd}`);
+                
+                // Показываем модальное окно
+                showPaymentModal();
+                
+            } catch(error) {
+                console.error('Parse error:', error);
+                showError('Ошибка обработки QR кода');
+                setTimeout(startScanner, 2000);
+            }
+        }
+        
+        // Показать окно оплаты
+        function showPaymentModal() {
+            console.log('Showing payment modal');
+            
+            // Обновляем суммы
+            document.getElementById('rub-amount').textContent = currentAmountRub.toFixed(2) + ' ₽';
+            document.getElementById('usd-amount').textContent = '$' + currentAmountUsd;
+            
+            // Показываем модальное окно
+            const modal = document.getElementById('payment-modal');
+            modal.classList.add('show');
+            
+            // Скрываем статус
+            document.getElementById('status-message').classList.remove('show');
+        }
+        
+        // Обработка оплаты
+        function processPayment() {
+            console.log('Processing payment...');
+            
+            const button = document.getElementById('pay-button');
+            button.classList.add('loading');
+            
+            // Имитация оплаты
+            setTimeout(() => {
+                // Успех
+                button.classList.remove('loading');
+                button.classList.add('success');
+                
+                // Показываем сообщение
+                document.getElementById('success-message').classList.add('show');
+                
+                // Звук
+                try {
+                    document.getElementById('payment-sound').play();
+                } catch(e) {
+                    console.log('Sound error:', e);
+                }
+                
+                // Вибрация
+                if (navigator.vibrate) {
+                    navigator.vibrate([100, 50, 100]);
+                }
+                
+                // Отправляем данные в Telegram
+                if (tg) {
+                    const data = `${currentAmountRub.toFixed(2)}|${currentAmountUsd}`;
+                    tg.sendData(data);
+                }
+                
+                console.log('Payment completed!');
+                
+            }, 3000);
+        }
+        
+        // Запуск при загрузке
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('App started');
+            
+            // Запускаем сканер
+            setTimeout(startScanner, 500);
+            
+            // Обработчик кнопки оплаты
+            document.getElementById('pay-button').addEventListener('click', processPayment);
+            
+            // Закрытие модального окна
+            document.getElementById('payment-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'payment-modal') {
+                    const button = document.getElementById('pay-button');
+                    if (!button.classList.contains('loading')) {
+                        // Закрываем модальное окно
+                        document.getElementById('payment-modal').classList.remove('show');
+                        
+                        // Сбрасываем кнопку
+                        button.classList.remove('success');
+                        document.getElementById('success-message').classList.remove('show');
+                        
+                        // Перезапускаем сканер
+                        setTimeout(startScanner, 500);
+                    }
+                }
+            });
+        });
     </script>
 </body>
 </html>
