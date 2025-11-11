@@ -20,9 +20,9 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f2f2f7;
             min-height: 100vh;
-            color: #333;
+            color: #1c1c1e;
             overflow-x: hidden;
         }
         
@@ -36,7 +36,7 @@
             background: white;
             border-radius: 20px;
             padding: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
             margin-top: 20px;
             animation: slideUp 0.3s ease;
         }
@@ -59,12 +59,13 @@
         
         .header h1 {
             font-size: 24px;
-            color: #333;
+            color: #1c1c1e;
             margin-bottom: 10px;
+            font-weight: 600;
         }
         
         .header p {
-            color: #666;
+            color: #8e8e93;
             font-size: 14px;
         }
         
@@ -72,6 +73,7 @@
             width: 100%;
             border-radius: 15px;
             overflow: hidden;
+            background: #f2f2f7;
         }
         
         #qr-reader video {
@@ -85,7 +87,9 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             z-index: 1000;
             animation: fadeIn 0.3s ease;
         }
@@ -102,21 +106,21 @@
             transform: translate(-50%, -50%);
             background: white;
             padding: 30px;
-            border-radius: 25px;
+            border-radius: 20px;
             width: 90%;
             max-width: 350px;
-            box-shadow: 0 25px 70px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
             animation: modalSlide 0.3s ease;
         }
         
         @keyframes modalSlide {
             from {
                 opacity: 0;
-                transform: translate(-50%, -45%);
+                transform: translate(-50%, -45%) scale(0.95);
             }
             to {
                 opacity: 1;
-                transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%) scale(1);
             }
         }
         
@@ -128,7 +132,7 @@
         .payment-icon {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: #007AFF;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -137,8 +141,14 @@
             font-size: 24px;
         }
         
+        .payment-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1c1c1e;
+        }
+        
         .amount-block {
-            background: #f8f9fa;
+            background: #f2f2f7;
             padding: 20px;
             border-radius: 15px;
             margin-bottom: 20px;
@@ -147,118 +157,181 @@
         .amount-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             font-size: 16px;
         }
         
         .amount-row:last-child {
             margin-bottom: 0;
-            padding-top: 10px;
-            border-top: 2px solid #e9ecef;
-            font-weight: bold;
-            color: #667eea;
+            padding-top: 12px;
+            border-top: 1px solid #d1d1d6;
+            font-weight: 600;
         }
         
         .amount-label {
-            color: #666;
+            color: #8e8e93;
+            font-weight: 400;
         }
         
         .amount-value {
-            font-weight: 600;
-            color: #333;
+            font-weight: 500;
+            color: #1c1c1e;
+        }
+        
+        .amount-row:last-child .amount-value {
+            color: #007AFF;
+            font-size: 18px;
         }
         
         .pay-button {
             width: 100%;
             padding: 16px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: #007AFF;
             color: white;
             border: none;
             border-radius: 12px;
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             position: relative;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 52px;
         }
         
         .pay-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            background: #0051D5;
         }
         
         .pay-button:active {
-            transform: translateY(0);
+            transform: scale(0.98);
         }
         
         .pay-button.loading {
+            background: #007AFF;
             pointer-events: none;
-            background: #e9ecef;
+        }
+        
+        .pay-button.success {
+            background: #34C759;
+            pointer-events: none;
+        }
+        
+        .button-text {
+            transition: all 0.3s ease;
+        }
+        
+        .pay-button.loading .button-text,
+        .pay-button.success .button-text {
+            opacity: 0;
+            transform: scale(0.8);
+            position: absolute;
         }
         
         .loader {
-            display: none;
+            position: absolute;
             width: 24px;
             height: 24px;
-            border: 3px solid #667eea;
+            border: 3px solid rgba(255,255,255,0.3);
             border-radius: 50%;
-            border-top-color: transparent;
+            border-top-color: white;
             animation: spin 0.8s linear infinite;
-            margin: 0 auto;
-        }
-        
-        .pay-button.loading .button-text {
-            display: none;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
         }
         
         .pay-button.loading .loader {
-            display: block;
+            opacity: 1;
+            transform: scale(1);
         }
         
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
         
-        .success-icon {
-            display: none;
-            font-size: 48px;
-            text-align: center;
-            animation: successPop 0.5s ease;
+        /* Галочка успеха в стиле Apple */
+        .success-checkmark {
+            position: absolute;
+            width: 28px;
+            height: 28px;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
         }
         
-        @keyframes successPop {
+        .pay-button.success .success-checkmark {
+            opacity: 1;
+            transform: scale(1);
+            animation: checkmarkPop 0.4s ease;
+        }
+        
+        @keyframes checkmarkPop {
             0% {
-                transform: scale(0);
+                transform: scale(0) rotate(-45deg);
                 opacity: 0;
             }
             50% {
-                transform: scale(1.2);
+                transform: scale(1.2) rotate(0deg);
             }
             100% {
-                transform: scale(1);
+                transform: scale(1) rotate(0deg);
                 opacity: 1;
             }
+        }
+        
+        .success-checkmark svg {
+            width: 100%;
+            height: 100%;
         }
         
         .success-text {
             display: none;
             text-align: center;
-            font-size: 20px;
-            color: #28a745;
+            font-size: 17px;
+            color: #34C759;
             font-weight: 600;
-            margin-top: 15px;
+            margin-top: 20px;
+            animation: fadeInUp 0.3s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .error-message {
             display: none;
-            background: #fee;
-            color: #c33;
+            background: #ffebee;
+            color: #c62828;
             padding: 12px;
             border-radius: 10px;
             margin-top: 15px;
             text-align: center;
             font-size: 14px;
+        }
+        
+        /* Стили для QR сканера */
+        #qr-reader__scan_region {
+            border-radius: 15px !important;
+        }
+        
+        #qr-reader__dashboard_section_csr button {
+            background: #007AFF !important;
+            color: white !important;
+            border: none !important;
+            padding: 10px 20px !important;
+            border-radius: 10px !important;
+            font-weight: 500 !important;
         }
     </style>
 </head>
@@ -285,15 +358,15 @@
                 
                 <div class="amount-block">
                     <div class="amount-row">
-                        <span class="amount-label">Сумма в рублях:</span>
+                        <span class="amount-label">Сумма в рублях</span>
                         <span class="amount-value" id="rub-amount">0 ₽</span>
                     </div>
                     <div class="amount-row">
-                        <span class="amount-label">Курс:</span>
+                        <span class="amount-label">Курс</span>
                         <span class="amount-value">83 ₽/$</span>
                     </div>
                     <div class="amount-row">
-                        <span class="amount-label">К оплате:</span>
+                        <span class="amount-label">К оплате</span>
                         <span class="amount-value" id="usd-amount">$0</span>
                     </div>
                 </div>
@@ -301,17 +374,22 @@
                 <button class="pay-button" id="pay-button" onclick="processPayment()">
                     <span class="button-text">Оплатить</span>
                     <div class="loader"></div>
+                    <div class="success-checkmark">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 12.5L11.5 15L15 9.5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="12" cy="12" r="9" stroke="white" stroke-width="2"/>
+                        </svg>
+                    </div>
                 </button>
+                
+                <div class="success-text" id="success-text">Оплата прошла успешно!</div>
             </div>
-            
-            <div class="success-icon" id="success-icon">✅</div>
-            <div class="success-text" id="success-text">Заказ оплачен!</div>
         </div>
     </div>
     
-    <!-- Звук оплаты -->
+    <!-- Звук оплаты Apple Pay -->
     <audio id="payment-sound" preload="auto">
-        <source src="data:audio/wav;base64,UklGRkQCAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YSACAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAf4B/gH+Af4B/gIB/gH+Af4CAgH+Af4CAgICAgH+AgICAgICAgH+AgICAgICAgICAgICAgICAf4CAgH+Af4CAgICAgH+Af4CAgICAgICAgICAgICAgICAgICAgH+AgICAgH+AgICAgICAgH+AgICAgICAgICAgICAf4CAgICAgICAgH+AgICAgICAgICAgICAgH+Af4CAgICAgICAgH+AgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA" type="audio/wav">
+        <source src="data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTcuODMuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsRbAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMSkAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV" type="audio/mpeg">
     </audio>
     
     <script>
@@ -319,6 +397,10 @@
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
+        
+        // Установка цветовой схемы
+        tg.setHeaderColor('#f2f2f7');
+        tg.setBackgroundColor('#f2f2f7');
         
         // Переменные для хранения данных
         let currentAmountRub = 0;
@@ -341,6 +423,11 @@
                 (decodedText, decodedResult) => {
                     // Останавливаем сканер после успешного сканирования
                     html5QrCode.stop();
+                    
+                    // Вибрация при успешном сканировании
+                    if (window.navigator.vibrate) {
+                        window.navigator.vibrate(50);
+                    }
                     
                     // Обрабатываем QR код
                     processQRCode(decodedText);
@@ -394,15 +481,43 @@
             
             // Симуляция обработки платежа (3 секунды)
             setTimeout(() => {
-                // Скрываем информацию об оплате
-                document.getElementById('payment-info').style.display = 'none';
+                // Меняем кнопку на успешное состояние
+                button.classList.remove('loading');
+                button.classList.add('success');
                 
-                // Показываем успешный результат
-                document.getElementById('success-icon').style.display = 'block';
+                // Показываем текст успеха
                 document.getElementById('success-text').style.display = 'block';
                 
+                // Вибрация успеха
+                if (window.navigator.vibrate) {
+                    window.navigator.vibrate([50, 30, 50]);
+                }
+                
                 // Воспроизводим звук
-                document.getElementById('payment-sound').play().catch(e => console.log('Audio play failed:', e));
+                const audio = document.getElementById('payment-sound');
+                audio.play().catch(e => {
+                    console.log('Audio play failed:', e);
+                    // Если не удалось воспроизвести встроенный звук, пробуем системный
+                    try {
+                        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                        const oscillator = audioContext.createOscillator();
+                        const gainNode = audioContext.createGain();
+                        
+                        oscillator.connect(gainNode);
+                        gainNode.connect(audioContext.destination);
+                        
+                        oscillator.frequency.value = 1000;
+                        oscillator.type = 'sine';
+                        
+                        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                        
+                        oscillator.start(audioContext.currentTime);
+                        oscillator.stop(audioContext.currentTime + 0.5);
+                    } catch(err) {
+                        console.log('Fallback audio failed:', err);
+                    }
+                });
                 
                 // Отправляем данные в бот
                 const data = currentAmountRub.toFixed(2) + '|' + currentAmountUsd;
@@ -435,9 +550,13 @@
         // Закрытие модального окна при клике вне его
         document.getElementById('payment-modal').addEventListener('click', (e) => {
             if (e.target.id === 'payment-modal') {
-                e.target.style.display = 'none';
-                // Перезапускаем сканер
-                initQRScanner();
+                // Не закрываем, если идет процесс оплаты
+                const button = document.getElementById('pay-button');
+                if (!button.classList.contains('loading') && !button.classList.contains('success')) {
+                    e.target.style.display = 'none';
+                    // Перезапускаем сканер
+                    initQRScanner();
+                }
             }
         });
     </script>
