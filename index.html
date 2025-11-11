@@ -48,6 +48,8 @@
             overflow: hidden;
             z-index: -1;
             opacity: 0.5;
+            top: 0;
+            left: 0;
         }
         
         .circle {
@@ -61,35 +63,45 @@
             width: 80px;
             height: 80px;
             left: 10%;
+            top: 20%;
             animation-delay: 0s;
+            animation-duration: 15s;
         }
         
         .circle:nth-child(2) {
             width: 120px;
             height: 120px;
             right: 20%;
+            top: 50%;
             animation-delay: 5s;
+            animation-duration: 20s;
         }
         
         .circle:nth-child(3) {
             width: 60px;
             height: 60px;
             left: 60%;
+            bottom: 20%;
             animation-delay: 10s;
+            animation-duration: 25s;
         }
         
         @keyframes float {
             0%, 100% {
-                transform: translateY(0) rotate(0deg);
+                transform: translate(0, 0) rotate(0deg);
                 opacity: 0.5;
             }
-            33% {
-                transform: translateY(-100px) rotate(120deg);
+            25% {
+                transform: translate(30px, -50px) rotate(90deg);
                 opacity: 0.3;
             }
-            66% {
-                transform: translateY(100px) rotate(240deg);
+            50% {
+                transform: translate(-20px, 30px) rotate(180deg);
                 opacity: 0.5;
+            }
+            75% {
+                transform: translate(50px, 50px) rotate(270deg);
+                opacity: 0.3;
             }
         }
         
@@ -197,69 +209,6 @@
         
         #qr-reader video {
             border-radius: 16px;
-        }
-        
-        /* Анимированная рамка сканирования */
-        .scan-animation {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 200px;
-            height: 200px;
-            pointer-events: none;
-            display: none;
-        }
-        
-        .scan-animation.active {
-            display: block;
-        }
-        
-        .corner {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--primary-blue);
-            animation: corner-pulse 1.5s ease-in-out infinite;
-        }
-        
-        .corner-tl {
-            top: 0;
-            left: 0;
-            border-right: none;
-            border-bottom: none;
-        }
-        
-        .corner-tr {
-            top: 0;
-            right: 0;
-            border-left: none;
-            border-bottom: none;
-        }
-        
-        .corner-bl {
-            bottom: 0;
-            left: 0;
-            border-right: none;
-            border-top: none;
-        }
-        
-        .corner-br {
-            bottom: 0;
-            right: 0;
-            border-left: none;
-            border-top: none;
-        }
-        
-        @keyframes corner-pulse {
-            0%, 100% {
-                opacity: 0.5;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 1;
-                transform: scale(1.1);
-            }
         }
         
         .payment-modal {
@@ -713,6 +662,25 @@
             10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
             20%, 40%, 60%, 80% { transform: translateX(5px); }
         }
+        
+        /* Debug panel */
+        .debug-panel {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            max-width: 200px;
+            display: none;
+            z-index: 9999;
+        }
+        
+        .debug-panel.show {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -730,14 +698,7 @@
                 <h1>Сканер QR-кода</h1>
                 <p>Наведите камеру на QR-код для быстрой оплаты</p>
             </div>
-            <div id="qr-reader">
-                <div class="scan-animation" id="scan-animation">
-                    <div class="corner corner-tl"></div>
-                    <div class="corner corner-tr"></div>
-                    <div class="corner corner-bl"></div>
-                    <div class="corner corner-br"></div>
-                </div>
-            </div>
+            <div id="qr-reader"></div>
             <div class="error-message" id="error-message"></div>
         </div>
     </div>
@@ -791,10 +752,12 @@
         </div>
     </div>
     
-    <!-- Звук оплаты Apple Pay - загрузка внешнего файла -->
+    <!-- Debug panel -->
+    <div class="debug-panel" id="debug-panel"></div>
+    
+    <!-- Звук оплаты Apple Pay -->
     <audio id="payment-sound" preload="auto">
         <source src="applepay.mp3" type="audio/mpeg">
-        <!-- Резервный звук если файл не найден -->
         <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" type="audio/mpeg">
     </audio>
     
@@ -808,6 +771,17 @@
         tg.setHeaderColor('#ffffff');
         tg.setBackgroundColor('#f2f2f7');
         
+        // Debug функция
+        function debug(message) {
+            console.log(message);
+            const debugPanel = document.getElementById('debug-panel');
+            debugPanel.innerHTML = message;
+            debugPanel.classList.add('show');
+            setTimeout(() => {
+                debugPanel.classList.remove('show');
+            }, 5000);
+        }
+        
         // Переменные
         let currentAmountRub = 0;
         let currentAmountUsd = 0;
@@ -816,6 +790,7 @@
         
         // Инициализация QR сканера
         function initQRScanner() {
+            debug('Запуск сканера...');
             html5QrCode = new Html5Qrcode("qr-reader");
             
             const config = { 
@@ -824,30 +799,31 @@
                 aspectRatio: 1.0
             };
             
-            // Показываем анимацию сканирования
-            document.getElementById('scan-animation').classList.add('active');
-            
             html5QrCode.start(
                 { facingMode: "environment" },
                 config,
                 (decodedText, decodedResult) => {
+                    debug(`QR найден: ${decodedText.substring(0, 50)}...`);
+                    
                     // Останавливаем сканер
-                    html5QrCode.stop();
-                    document.getElementById('scan-animation').classList.remove('active');
-                    
-                    // Вибрация при успешном сканировании
-                    if (navigator.vibrate) {
-                        navigator.vibrate([50, 30, 50]);
-                    }
-                    
-                    // Обрабатываем QR код
-                    processQRCode(decodedText);
+                    html5QrCode.stop().then(() => {
+                        // Вибрация при успешном сканировании
+                        if (navigator.vibrate) {
+                            navigator.vibrate([50, 30, 50]);
+                        }
+                        
+                        // Обрабатываем QR код
+                        processQRCode(decodedText);
+                    }).catch(err => {
+                        debug(`Ошибка остановки: ${err}`);
+                        processQRCode(decodedText);
+                    });
                 },
                 (errorMessage) => {
-                    // Игнорируем ошибки сканирования
+                    // Игнорируем ошибки сканирования - это нормально
                 }
             ).catch((err) => {
-                document.getElementById('scan-animation').classList.remove('active');
+                debug(`Ошибка камеры: ${err}`);
                 showError("Не удалось запустить камеру. Проверьте разрешения.");
                 console.error(err);
             });
@@ -856,8 +832,21 @@
         // Обработка QR кода
         function processQRCode(url) {
             try {
-                const urlParams = new URLSearchParams(url.split('?')[1]);
-                const sumParam = urlParams.get('sum');
+                debug(`Обработка URL: ${url}`);
+                
+                // Проверяем, что это нужный нам QR
+                if (!url.includes('qr.nspk.ru')) {
+                    debug('Это не платежный QR');
+                    showError("Отсканируйте платежный QR-код");
+                    setTimeout(() => initQRScanner(), 2000);
+                    return;
+                }
+                
+                // Парсим URL
+                const urlObj = new URL(url);
+                const sumParam = urlObj.searchParams.get('sum');
+                
+                debug(`Сумма из QR: ${sumParam}`);
                 
                 if (!sumParam) {
                     showError("Не удалось прочитать сумму из QR-кода");
@@ -870,10 +859,13 @@
                 currentAmountRub = kopeks / 100;
                 currentAmountUsd = (currentAmountRub / EXCHANGE_RATE).toFixed(2);
                 
+                debug(`Рубли: ${currentAmountRub}, USD: ${currentAmountUsd}`);
+                
                 // Показываем модальное окно
                 showPaymentModal();
                 
             } catch (error) {
+                debug(`Ошибка: ${error.message}`);
                 showError("Ошибка при обработке QR-кода");
                 console.error(error);
                 setTimeout(() => initQRScanner(), 2000);
@@ -885,10 +877,12 @@
             document.getElementById('rub-amount').textContent = currentAmountRub.toFixed(2) + ' ₽';
             document.getElementById('usd-amount').textContent = '$' + currentAmountUsd;
             document.getElementById('payment-modal').style.display = 'block';
+            debug('Модальное окно открыто');
         }
         
         // Обработка оплаты
         async function processPayment() {
+            debug('Начало оплаты...');
             const button = document.getElementById('pay-button');
             button.classList.add('loading');
             
@@ -911,8 +905,9 @@
             try {
                 const audio = document.getElementById('payment-sound');
                 await audio.play();
+                debug('Звук воспроизведен');
             } catch (e) {
-                console.log('Audio play failed:', e);
+                debug(`Ошибка звука: ${e.message}`);
                 // Создаем системный звук как резерв
                 try {
                     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -922,7 +917,6 @@
                     oscillator.connect(gainNode);
                     gainNode.connect(audioContext.destination);
                     
-                    // Настройки для звука похожего на Apple Pay
                     oscillator.frequency.setValueAtTime(1200, audioContext.currentTime);
                     oscillator.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.1);
                     
@@ -932,16 +926,14 @@
                     oscillator.start(audioContext.currentTime);
                     oscillator.stop(audioContext.currentTime + 0.3);
                 } catch(err) {
-                    console.log('Fallback audio failed:', err);
+                    debug('Fallback звук тоже не работает');
                 }
             }
             
             // Отправляем данные в бот
             const data = currentAmountRub.toFixed(2) + '|' + currentAmountUsd;
             tg.sendData(data);
-            
-            // НЕ закрываем приложение автоматически
-            // Даем пользователю насладиться анимацией успеха
+            debug(`Данные отправлены: ${data}`);
         }
         
         // Показать ошибку
@@ -969,20 +961,24 @@
                 const button = document.getElementById('pay-button');
                 if (!button.classList.contains('loading') && !button.classList.contains('success')) {
                     e.target.style.display = 'none';
-                    // Сбрасываем состояние кнопки
-                    button.classList.remove('success');
+                    // Сбрасываем состояние
+                    button.classList.remove('success', 'loading');
+                    button.querySelector('.button-text').textContent = 'Оплатить';
                     document.getElementById('success-message').classList.remove('show');
                     // Перезапускаем сканер
                     initQRScanner();
+                    debug('Модальное окно закрыто, сканер перезапущен');
                 }
             }
         });
         
         // Обработка кнопки "Назад" в Telegram
-        tg.BackButton.show();
-        tg.BackButton.onClick(() => {
-            tg.close();
-        });
+        if (tg.BackButton) {
+            tg.BackButton.show();
+            tg.BackButton.onClick(() => {
+                tg.close();
+            });
+        }
     </script>
 </body>
 </html>
