@@ -312,6 +312,9 @@
             <h2>📱 QR-код для оплаты</h2>
             <p id="qr-deal-info"></p>
             <div class="qr-code-container" id="qr-code"></div>
+            <p style="margin-top: 10px; font-size: 14px; color: #666;">
+                Отсканируйте этот QR-код или скопируйте ссылку
+            </p>
             <div class="action-buttons">
                 <button class="action-button complete" onclick="completeDeal()">
                     ✅ Оплачено
@@ -323,6 +326,8 @@
         </div>
     </div>
     
+    <div id="notification" class="notification"></div>
+    
     <button class="refresh-button" onclick="loadDeals()">↻</button>
     
     <script>
@@ -333,14 +338,24 @@
         tg.setHeaderColor('#ffffff');
         tg.setBackgroundColor('#f2f2f7');
         
-        // Получаем user_id из URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const userId = urlParams.get('user_id');
-        
         // Переменные
-        let currentDeals = [];
         let currentDealId = null;
         let refreshInterval = null;
+        let lastDealsCount = 0;
+        
+        // Кэш для сделок (имитация получения данных от бота)
+        let dealsCache = [];
+        
+        // Показать уведомление
+        function showNotification(message, isError = false) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = 'notification show' + (isError ? ' error' : '');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
         
         // Загрузка сделок
         async function loadDeals() {
@@ -348,41 +363,79 @@
             const container = document.getElementById('deals-container');
             const emptyState = document.getElementById('empty-state');
             
-            loading.style.display = 'block';
-            container.style.display = 'none';
-            emptyState.style.display = 'none';
+            // Показываем загрузку только при первой загрузке
+            if (dealsCache.length === 0) {
+                loading.style.display = 'block';
+                container.style.display = 'none';
+                emptyState.style.display = 'none';
+            }
             
             try {
-                // Здесь должен быть запрос к API для получения сделок
-                // Пока используем тестовые данные
+                // Отправляем запрос на получение сделок
+                // В реальности это должно быть через API, но пока используем tg.sendData
+                // как обходное решение для демонстрации
                 
-                // Симуляция загрузки
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                
-                // Тестовые данные
-                currentDeals = [
-                    {
-                        id: 1,
-                        amount_rub: 2421.00,
-                        amount_usd: 32.41,
-                        commission: 169.47,
-                        created_at: new Date()
-                    }
-                ];
+                // Для демонстрации создадим тестовые данные
+                // В реальной версии здесь должен быть запрос к API бота
+                await simulateLoadingDeals();
                 
                 loading.style.display = 'none';
                 
-                if (currentDeals.length > 0) {
+                if (dealsCache.length > 0) {
                     container.style.display = 'flex';
+                    emptyState.style.display = 'none';
                     renderDeals();
+                    
+                    // Уведомление о новых сделках
+                    if (dealsCache.length > lastDealsCount) {
+                        showNotification('🆕 Новая сделка!');
+                        // Вибрация
+                        if (navigator.vibrate) {
+                            navigator.vibrate([100, 50, 100]);
+                        }
+                    }
+                    lastDealsCount = dealsCache.length;
                 } else {
+                    container.style.display = 'none';
                     emptyState.style.display = 'block';
                 }
                 
             } catch (error) {
                 console.error('Error loading deals:', error);
                 loading.style.display = 'none';
-                emptyState.style.display = 'block';
+                
+                if (dealsCache.length === 0) {
+                    emptyState.style.display = 'block';
+                }
+            }
+        }
+        
+        // Симуляция загрузки сделок (замените на реальный API)
+        async function simulateLoadingDeals() {
+            // Имитация задержки сети
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // Проверяем есть ли новые сделки в localStorage
+            // (бот может записывать их туда через postMessage)
+            const storedDeals = localStorage.getItem('pending_deals');
+            if (storedDeals) {
+                try {
+                    dealsCache = JSON.parse(storedDeals);
+                } catch (e) {
+                    console.error('Error parsing deals:', e);
+                }
+            }
+            
+            // Если нет сохраненных сделок, показываем демо-данные
+            if (dealsCache.length === 0 && Math.random() > 0.5) {
+                // Для демонстрации иногда показываем тестовую сделку
+                dealsCache = [{
+                    deal_id: Date.now(),
+                    amount_rub: 2421.00,
+                    amount_usd: 32.41,
+                    trader_commission: 169.47,
+                    created_at: new Date().toISOString()
+                }];
             }
         }
         
@@ -391,7 +444,7 @@
             const container = document.getElementById('deals-container');
             container.innerHTML = '';
             
-            currentDeals.forEach(deal => {
+            dealsCache.forEach(deal => {
                 const dealCard = createDealCard(deal);
                 container.appendChild(dealCard);
             });
@@ -401,6 +454,7 @@
         function createDealCard(deal) {
             const card = document.createElement('div');
             card.className = 'deal-card';
+            card.id = `deal-${deal.deal_id}`;
             
             const time = new Date(deal.created_at).toLocaleTimeString('ru-RU', {
                 hour: '2-digit',
@@ -409,12 +463,12 @@
             
             card.innerHTML = `
                 <div class="deal-header">
-                    <span class="deal-id">Сделка #${deal.id}</span>
+                    <span class="deal-id">Сделка #${deal.deal_id}</span>
                     <span class="deal-time">${time}</span>
                 </div>
                 <div class="deal-amount">${deal.amount_rub.toFixed(2)} ₽</div>
-                <div class="deal-commission">+${deal.commission.toFixed(2)} ₽ комиссия</div>
-                <button class="accept-button" onclick="acceptDeal(${deal.id})">
+                <div class="deal-commission">+${deal.trader_commission.toFixed(2)} ₽ комиссия</div>
+                <button class="accept-button" onclick="acceptDeal(${deal.deal_id})">
                     💰 Принять сделку
                 </button>
             `;
@@ -424,6 +478,10 @@
         
         // Принятие сделки
         async function acceptDeal(dealId) {
+            // Находим сделку
+            const deal = dealsCache.find(d => d.deal_id === dealId);
+            if (!deal) return;
+            
             // Отключаем все кнопки
             document.querySelectorAll('.accept-button').forEach(btn => {
                 btn.disabled = true;
@@ -431,31 +489,38 @@
             });
             
             try {
-                // Здесь должен быть запрос к API
-                // Симуляция принятия
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                
-                // Генерируем тестовый QR
-                const deal = currentDeals.find(d => d.id === dealId);
+                // Генерируем QR
                 const qrAmount = Math.round(deal.amount_rub * 100);
                 const qrData = `https://qr.nspk.ru/AD10007KC7DTK5S49OCRQ6AH95CLMJ6E?type=02&bank=100000000270&sum=${qrAmount}&cur=RUB&crc=5FA7`;
                 
                 currentDealId = dealId;
                 
-                // Показываем QR
-                document.getElementById('qr-deal-info').textContent = `Сумма: ${deal.amount_rub.toFixed(2)} ₽`;
-                document.getElementById('qr-code').textContent = qrData;
-                document.getElementById('qr-modal').classList.add('show');
-                
-                // Отправляем данные в Telegram
+                // Отправляем данные в бот
                 tg.sendData(JSON.stringify({
                     action: 'accept_deal',
                     deal_id: dealId,
                     qr_data: qrData
                 }));
                 
+                // Удаляем сделку из списка
+                dealsCache = dealsCache.filter(d => d.deal_id !== dealId);
+                
+                // Показываем QR
+                document.getElementById('qr-deal-info').textContent = `Сумма: ${deal.amount_rub.toFixed(2)} ₽`;
+                document.getElementById('qr-code').textContent = qrData;
+                document.getElementById('qr-modal').classList.add('show');
+                
+                // Обновляем интерфейс
+                renderDeals();
+                if (dealsCache.length === 0) {
+                    document.getElementById('deals-container').style.display = 'none';
+                    document.getElementById('empty-state').style.display = 'block';
+                }
+                
             } catch (error) {
                 console.error('Error accepting deal:', error);
+                showNotification('Ошибка при принятии сделки', true);
+                
                 // Восстанавливаем кнопки
                 document.querySelectorAll('.accept-button').forEach(btn => {
                     btn.disabled = false;
@@ -478,17 +543,24 @@
                 // Закрываем модальное окно
                 document.getElementById('qr-modal').classList.remove('show');
                 
-                // Перезагружаем сделки
+                showNotification('✅ Сделка успешно завершена!');
+                
+                // Обновляем список
                 loadDeals();
                 
             } catch (error) {
                 console.error('Error completing deal:', error);
+                showNotification('Ошибка при завершении сделки', true);
             }
         }
         
         // Отмена сделки
         async function cancelDeal() {
             if (!currentDealId) return;
+            
+            if (!confirm('Вы уверены, что хотите отменить сделку?')) {
+                return;
+            }
             
             try {
                 // Отправляем отмену
@@ -500,20 +572,32 @@
                 // Закрываем модальное окно
                 document.getElementById('qr-modal').classList.remove('show');
                 
-                // Перезагружаем сделки
+                showNotification('❌ Сделка отменена', true);
+                
+                // Обновляем список
                 loadDeals();
                 
             } catch (error) {
                 console.error('Error canceling deal:', error);
+                showNotification('Ошибка при отмене сделки', true);
             }
         }
+        
+        // Получение сделок через postMessage (для связи с ботом)
+        window.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'new_deals') {
+                // Обновляем кэш сделок
+                localStorage.setItem('pending_deals', JSON.stringify(event.data.deals));
+                loadDeals();
+            }
+        });
         
         // Инициализация
         document.addEventListener('DOMContentLoaded', () => {
             loadDeals();
             
-            // Автообновление каждые 10 секунд
-            refreshInterval = setInterval(loadDeals, 10000);
+            // Автообновление каждые 5 секунд
+            refreshInterval = setInterval(loadDeals, 5000);
             
             // Кнопка назад
             if (tg.BackButton) {
@@ -528,8 +612,13 @@
         // Закрытие модального окна при клике вне его
         document.getElementById('qr-modal').addEventListener('click', (e) => {
             if (e.target.id === 'qr-modal') {
-                document.getElementById('qr-modal').classList.remove('show');
+                // Не закрываем, если идет обработка
             }
+        });
+        
+        // Очистка при закрытии
+        window.addEventListener('beforeunload', () => {
+            clearInterval(refreshInterval);
         });
     </script>
 </body>
